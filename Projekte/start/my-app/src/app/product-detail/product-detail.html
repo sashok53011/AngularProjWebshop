@@ -1,0 +1,7 @@
+<!-- Das product-Detail-Template zeigt die Details des ausgewählten Produkts an, wenn ein Produkt ausgewählt ist.
+Die Kommunikation zwischen der ProductList-Komponente und der ProductDetail-Komponente erfolgt über ein Signal,
+das das ausgewählte Produkt darstellt. -->
+@if (product()) {
+    <p>You selected: <strong>{{ product()?.title }}</strong></p>
+    <button (click)="addToCart()">Add to Cart</button>
+}
