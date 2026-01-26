@@ -3,14 +3,14 @@
 
 }
 <ul class="pill-group">
-    @for (product of products; track product.id) {
+    @for (product of products | sort:'price'; track product.id) {
         <li class="pill" (click)="selectedProduct = product">
             @switch (product.title) {
                 @case ('Keyboard') { ⌨️ }
                 @case ('Microphone') { 🎙️ }
                 @default { 🏷️ }
             }
-            {{ product.title }}
+            {{ product.title }} - {{ product.price  }} EUR
         </li>
     }
      @empty {

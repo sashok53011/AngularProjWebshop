@@ -1,9 +1,11 @@
+import { CommonModule } from '@angular/common';
 import { Component,input, output, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core'; 
 import { Product } from '../product';
+import { Numeric } from '../numeric';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [],
+  imports: [CommonModule, Numeric],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
   //changeDetection: ChangeDetectionStrategy.OnPush
@@ -20,4 +22,5 @@ export class ProductDetail {
   get productTitle() {
     return this.product() ?.title;
   }
+  
 }

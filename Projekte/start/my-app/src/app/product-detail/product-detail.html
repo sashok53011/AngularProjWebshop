@@ -1,7 +1,17 @@
 <!-- Das product-Detail-Template zeigt die Details des ausgewählten Produkts an, wenn ein Produkt ausgewählt ist.
 Die Kommunikation zwischen der ProductList-Komponente und der ProductDetail-Komponente erfolgt über ein Signal,
 das das ausgewählte Produkt darstellt. -->
+
+@let selectedProduct = product()!; <!-- Lokale Variable für das ausgewählte Produkt, bessere Lesbarkeit, Performance -->
+
 @if (product()) {
-    <p>You selected: <strong>{{ product()?.title }}</strong></p>
+    <p>You selected: <strong>{{ selectedProduct.title }}</strong></p>
+    <p>{{selectedProduct.price | currency: 'EUR'}}</p>
+    <div class="pill-group">
+        @for (cat of selectedProduct.categories | keyvalue; track cat.key) {
+      <p class="pill">{{cat.value | lowercase}}</p>
+    }
+    </div>
     <button (click)="addToCart()">Add to Cart</button>
+    <!-- <input appNumeric type="text" placeholder="Enter quantity" /> -->
 }
