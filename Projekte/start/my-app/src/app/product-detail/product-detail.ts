@@ -1,15 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component,input, output, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core'; 
+import { Component,input, output } from '@angular/core'; 
 import { Product } from '../product';
-import { Numeric } from '../numeric';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule, Numeric],
+  imports: [CommonModule],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
-  //changeDetection: ChangeDetectionStrategy.OnPush
- //encapsulation: ViewEncapsulation.None // Keine Kapselung der Stile
 })
 export class ProductDetail {
   product = input<Product>();

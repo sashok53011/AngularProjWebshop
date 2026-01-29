@@ -3,19 +3,21 @@ import { Product } from '../product'; // Import des Interface Product
 import { ProductDetail } from '../product-detail/product-detail';
 import { SortPipe } from '../sort-pipe';
 import { Products } from '../products';
-import  { ProductView } from '../product-view/product-view';
-import { Favorites } from '../favorites/favorites'; // Import der Favorites-Komponente
 
 @Component({
   selector: 'app-product-list', // Der CSS-Selector für die Komponente
-  imports: [ProductDetail, SortPipe, ProductView, Favorites],  // Keine zusätzlichen Importe erforderlich [],
-                        // jetzt schon, die ProductDetail-Komponente wird registriert
+  imports: [ProductDetail, SortPipe],  //die ProductDetail-Komponente wird registriert
   templateUrl: './product-list.html', // Pfad zur HTML-Vorlage
   styleUrl: './product-list.css', // Pfad zur CSS-Datei
   providers: [Products]
 })
 export class ProductList implements OnInit {
   
+  private getProducts() {
+    this.productService.getProduct().subscribe(products => {
+      this.products = products;
+    });
+  }
   products: Product[] = [];
 
   // Property für das ausgewählte Produkt
@@ -29,7 +31,7 @@ export class ProductList implements OnInit {
   constructor(private productService: Products) {}
   
   // Lifecycle-Hook OnInit zur Initialisierung der Produktliste
-  ngOnInit() {
-  this.products = this.productService.getProducts();
+  ngOnInit(): void {
+    this.getProducts();
   }
 }
