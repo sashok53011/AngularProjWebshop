@@ -26,7 +26,7 @@ export class Products {
       categories: {4: 'Entertainment'}}
     ];
 
-    getProduct(): Observable<Product[]> {
+    getProducts(): Observable<Product[]> {
       return of(this.products)
     }
   }

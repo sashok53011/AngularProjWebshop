@@ -1,4 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component,
+  inject,
+  Signal,
+  computed,
+  signal  } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ProductList } from './product-list/product-list';
 import { Copyright } from './copyright';
@@ -17,25 +21,34 @@ import { KeyLogger } from './key-logger/key-logger';
   ]
 })
 export class App {
-  title = 'World';
+  title : Signal<string> = signal('');
+  //title = 'World';
   // $ makieren der Observable-Variable, alle 2 Sekunden erneuern
   // Observable braucht hier einen generischen Datentyp, oder void dann
   // wird nur ein Signal übertragen.
   title$ = new Observable<string>(observer => {
      setInterval(() => {
-      observer.next(this.title);
+      observer.next(this.title());
     }, 2000);
   })
 
   settings = inject(APP_SETTINGS);
 
+  currentDate = signal(new Date());
+
   private setTitle = () => { 
-    const timestamp = new Date();        
-    this.title = `${this.settings.title} (${timestamp})`;
+    //const timestamp = new Date();
+    // jetzt als Signal
+    this.currentDate.set(new Date());        
+    //this.title(`${this.settings.title} (${this.currentDate()})`);
   }
   // subscribe, um im title$ Observable zu registrieren
   // und über Veränderungen informiert zu werden.
   constructor() {
     this.title$.subscribe(this.setTitle);
+    // computed für abgeleitete Signale
+    this.title = computed(() => {
+      return `${this.settings.title} (${this.currentDate()})`;
+    });
   }
 }
