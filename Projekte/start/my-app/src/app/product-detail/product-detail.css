@@ -1,4 +1,4 @@
-button {
+/* button {
   display: flex;
   align-items: center;
   --button-accent: var(--bright-blue);
@@ -20,7 +20,7 @@ button {
 
 button:hover {
   background: color-mix(in srgb, var(--button-accent) 50%, transparent);
-}
+} */
 
 /* div {
   padding: 1rem;
@@ -54,4 +54,23 @@ button:hover {
   line-height: 1.4rem;
   letter-spacing: -0.00875rem;
   text-decoration: none;
+}
+
+button.secondary {
+  display: inline;
+  margin-left: 5px;
+  --button-accent: var(--vivid-pink);
+}
+
+button.delete {
+  display: inline;
+  margin-left: 5px;
+  --button-accent: var(--hot-red);
+}
+
+.button-group {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  flex-wrap: wrap;
 }

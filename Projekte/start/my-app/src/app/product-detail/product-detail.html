@@ -2,16 +2,25 @@
 Die Kommunikation zwischen der ProductList-Komponente und der ProductDetail-Komponente erfolgt über ein Signal,
 das das ausgewählte Produkt darstellt. -->
 
-@let selectedProduct = product()!; <!-- Lokale Variable für das ausgewählte Produkt, bessere Lesbarkeit, Performance -->
+@let product = (product$ | async); <!-- Lokale Variable für das ausgewählte Produkt, bessere Lesbarkeit, Performance -->
 
-@if (product()) {
-    <p>You selected: <strong>{{ selectedProduct.title }}</strong></p>
-    <p>{{selectedProduct.price | currency: 'EUR'}}</p>
+@if (product) {
+    <p>You selected: <strong>{{ product.title }}</strong></p>
+    <p>{{product.price | currency: 'EUR'}}</p>
+    <input placeholder="New price" #price type="number" />
+      <button
+        class="secondary"
+          (click)="changePrice(product, price.value)">
+            Change
+      </button>
     <div class="pill-group">
-        @for (cat of selectedProduct.categories | keyvalue; track cat.key) {
-      <p class="pill">{{cat.value | lowercase}}</p>
-    }
+      <p class="pill">{{product.category}}</p>
     </div>
+    <div class="button-group">
+@if (authService.isLoggedIn()) {   
     <button (click)="addToCart()">Add to Cart</button>
+}
+    <button class="delete" (click)="remove(product)">Delete</button>
+    </div>
     <!-- <input appNumeric/> -->
 }

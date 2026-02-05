@@ -8,6 +8,8 @@ import { fromEvent, tap, map, filter } from 'rxjs'; // fromEvent erzeugt ein Obs
   styleUrl: './key-logger.css',
 })
 export class KeyLogger {
+  // Zugriff auf das HTML-Element mit dem ViewChild-Dekorator
+  // input() ist ein Signal, das das ElementRef zurückgibt
   input = viewChild<ElementRef>('keyContainer');
   keys = '';
   numeric = input();
