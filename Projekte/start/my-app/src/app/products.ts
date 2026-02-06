@@ -66,6 +66,7 @@ export class Products {
   // und zurückgegeben.
   addProduct(newProduct: Partial<Product>): Observable<Product> {
     return this.http.post<Product>(this.productsUrl, newProduct).pipe(
+      // Hinzufügen des neuen Produkts zum lokalen Array
       map(product => {
         this.products.push(product);
         return product;

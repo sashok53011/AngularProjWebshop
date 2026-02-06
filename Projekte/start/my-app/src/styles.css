@@ -46,3 +46,10 @@ button {
 button:hover {
   background: color-mix(in srgb, var(--button-accent) 50%, transparent);
 }
+
+a {
+  text-decoration: none;
+}
+.spacer {
+  flex: 1 1 auto;
+}

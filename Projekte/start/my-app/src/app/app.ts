@@ -3,7 +3,7 @@ import { Component,
   Signal,
   computed,
   signal  } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { ProductList } from './product-list/product-list';
 import { Copyright } from './copyright';
 import { APP_SETTINGS, appSettings } from './app.setting';
@@ -13,7 +13,7 @@ import { AuthComp } from './auth-comp/auth-comp';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ProductList, Copyright, KeyLogger, AuthComp],
+  imports: [RouterOutlet, RouterLink, ProductList, Copyright, KeyLogger, AuthComp],
   templateUrl: './app.html',
   styleUrl: './app.css',
   /* providers: [
@@ -35,7 +35,7 @@ export class App {
 
   settings = inject(APP_SETTINGS);
 
-  currentDate = signal(new Date());
+  //currentDate = signal(new Date());
 
   /* private setTitle = () => { 
     //const timestamp = new Date();

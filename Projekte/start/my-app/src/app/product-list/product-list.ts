@@ -6,11 +6,10 @@ import { Products } from '../products';
 import { Observable } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 // toSignal wandelt ein Observable in ein Signal um
-import { ProductCreate } from '../product-create/product-create';
 
 @Component({
   selector: 'app-product-list', //
-  imports: [ProductDetail, SortPipe, ProductCreate],
+  imports: [ProductDetail, SortPipe],
   templateUrl: './product-list.html', // Pfad zur HTML-Vorlage
   styleUrl: './product-list.css', // Pfad zur CSS-Datei
   providers: [Products] // Registrierung des Products-Services
