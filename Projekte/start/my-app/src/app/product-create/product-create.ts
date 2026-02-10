@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Products } from '../products';
+import{ Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-create',
@@ -8,8 +9,8 @@ import { Products } from '../products';
   styleUrl: './product-create.css',
 })
 export class ProductCreate {
-  // Dependency Injection des Products-Services
-  constructor(private productsService: Products) {}
+  // Dependency Injection des Products-Services und des Router-Services
+  constructor(private productsService: Products, private router: Router) {}
 
   // Die Methode akzeptiert die Produktdetails als Parameter
   // und ruft die addProduct-Methode des Products-Services auf
@@ -19,6 +20,7 @@ export class ProductCreate {
     title,
     price: Number(price),
     category
-    }).subscribe();
+    }).subscribe(() => this.router.navigate(['/products']));
+     // Nach dem Hinzufügen eines Produkts wird zur Produktliste navigiert
   }
 }

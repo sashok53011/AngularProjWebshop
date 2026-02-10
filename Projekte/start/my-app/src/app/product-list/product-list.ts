@@ -1,45 +1,37 @@
+import { AsyncPipe } from '@angular/common'; // Import für AsyncPipe, um Observable in der Vorlage zu verwenden
 import { Component, inject, OnInit } from '@angular/core';
 import { Product } from '../product'; // Import des Interface Product
-import { ProductDetail } from '../product-detail/product-detail';
 import { SortPipe } from '../sort-pipe';
 import { Products } from '../products';
-import { Observable } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Observable, switchMap, of, map } from 'rxjs';
+//import { toSignal } from '@angular/core/rxjs-interop';
 // toSignal wandelt ein Observable in ein Signal um
+import { ActivatedRoute, RouterLink } from '@angular/router'; // Import für RouterLink, um Navigation zu ermöglichen
+
 
 @Component({
   selector: 'app-product-list', //
-  imports: [ProductDetail, SortPipe],
+  imports: [ SortPipe, RouterLink, AsyncPipe],
   templateUrl: './product-list.html', // Pfad zur HTML-Vorlage
   styleUrl: './product-list.css', // Pfad zur CSS-Datei
-  providers: [Products] // Registrierung des Products-Services
-})
+  })
+
 export class ProductList implements OnInit {
-  // Property für die Liste der Produkte
-  //products: Product[] = []; umwandeln,
-  // porducts$ darf ein Observable mit Product-Array sein oder undefined
-  products$: Observable<Product[]> | undefined;
-
-  // DI des Products-Services
-  private productsService = inject(Products);
-
-  // Methode zum Abrufen der Produkte
-  private getProducts() {
-    this.products$ = this.productsService.getProducts();
-  }
-  // Kap.7, 2 Parameter werden an die toSignal-Funktion übergeben
-  // das Observable, das wir umwandeln wollen und ein initialer Wert optional für das Signal
-  products = toSignal(this.productsService.getProducts(), {initialValue: []});
   
-  // Property für das ausgewählte Produkt
-  selectedProduct: Product | undefined;
-
-  // Verbindung um Event vom Kind zu empfangen, jetzt mit Produkt
-  onAdded() {
-    alert(`${this.selectedProduct?.title} wurde zum Warenkorb hinzugefügt.`);
+  products$: Observable<Product[]> | undefined;
+  
+  // Methode zum Abrufen der Produkte
+  // Prefetching: Produkte werden bereits geladen,
+  //  bevor die Route aktiviert wird, um eine schnellere Anzeige zu ermöglichen
+  // Das Data-Observable der ActivatedRoute enthält die Daten, die von einem Resolver
+  //  bereitgestellt werden, bevor die Route aktiviert wird.
+  // switchMap-Operator gibt die Produkte in einem neuen Observable zurück, das von der Route bereitgestellt wird.
+  private getProducts() {
+    this.products$ = this.route.data.pipe(
+      switchMap(data => of(data['products'])));
   }
-  // Dependency Injection des Products-Services
-  //constructor(private productService: Products) {}
+  // Dependency Injection des ActivatedRoute, um auf die Daten der aktuellen Route zuzugreifen
+  constructor(private productService: Products, private route: ActivatedRoute) {}
 
   // Lifecycle-Hook OnInit zur Initialisierung der Produktliste
   ngOnInit(): void {

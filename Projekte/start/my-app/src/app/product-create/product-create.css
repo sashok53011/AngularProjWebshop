@@ -1,3 +1,7 @@
+:host {
+  width: 400px;
+}
+
 input {
   width: 200px;
 }

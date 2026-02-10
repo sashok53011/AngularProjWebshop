@@ -8,7 +8,7 @@ import { APP_SETTINGS } from './app.setting';
 })
 export class Auth {
   // HttpClient wird über DI bereitgestellt
-  // Singal können nicht nur in der Angualar-Komponenten,
+  // Singals können nicht nur in der Angualar-Komponenten,
   // sondern auch in Services genutzt werden
   constructor(private http: HttpClient) {}
   private accessToken = signal('');

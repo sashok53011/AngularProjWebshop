@@ -11,24 +11,7 @@ import { APP_SETTINGS } from './app.setting';
 
 export class Products {
   private products: Product[] = [];
-      /* { id: 1,
-        title: 'Keyboard',
-        price: 100,
-        categories: {1: 'Computing', 2: 'Peripherals'}},
-      { id: 2,
-      title: 'Microphone',
-      price: 35,
-      categories: {3: 'Mulitmedia'}},
-      { id: 3,
-      title: 'Web camera',
-      price: 79,
-      categories: {1: 'Computing', 3: 'Mulitmedia'}},
-      { id: 4,
-      title: 'Tablet',
-      price: 500,
-      categories: {4: 'Entertainment'}}
-    ]; */
-
+      
   // API URL aus den App-Einstellungen holen
   private productsUrl = inject(APP_SETTINGS).apiUrl + '/products';
 
@@ -37,18 +20,22 @@ export class Products {
 
   // Nutze HttpClient, um die Produkte von der API zu laden
   // und gibt ein Observable mit einem Product-Array zurück
-  getProducts(): Observable<Product[]> {
-      
-    const options = new HttpParams().set('limit', '10');
-    // Hinzufügen der Parameter zum GET-Request
-    return this.http.get<Product[]>(this.productsUrl, {
-      params: options
-    }).pipe(map(products => {
+  getProducts(limit?: number): Observable<Product[]> {
+    // Wenn es keine Produkte im lokalen Array gibt, lade sie von der API
+    if (this.products.length === 0) {
+      const options = new HttpParams().set('limit', limit ||'7');
+      // Hinzufügen der Parameter zum GET-Request
+      return this.http.get<Product[]>(this.productsUrl, {
+        params: options
+      }).pipe(map(products => {
       this.products = products;
       return products;
+      }));
     }
-    ));
-  }
+    return of(this.products);
+  };
+   
+  
   // Kap. 8 Umbau der Product-Detail-Methode, die Pruduktdetails von der API lädt,
   // indem sie Http-Get Request nutzt
   // Methode akzeptiert die Produkt-ID als Parameter und initiiert einen GET-Request
@@ -97,5 +84,5 @@ export class Products {
         this.products.splice(index, 1);
       })
     );
-  }
+  };
 }
