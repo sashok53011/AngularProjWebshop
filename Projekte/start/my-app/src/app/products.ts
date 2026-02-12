@@ -23,7 +23,7 @@ export class Products {
   getProducts(limit?: number): Observable<Product[]> {
     // Wenn es keine Produkte im lokalen Array gibt, lade sie von der API
     if (this.products.length === 0) {
-      const options = new HttpParams().set('limit', limit ||'7');
+      const options = new HttpParams().set('limit', limit ||'10');
       // Hinzufügen der Parameter zum GET-Request
       return this.http.get<Product[]>(this.productsUrl, {
         params: options

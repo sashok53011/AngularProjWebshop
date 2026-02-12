@@ -1,1 +1,13 @@
-<p>cart works!</p>
+<div [formGroup]="cartForm">
+    <div formArrayName="products">
+        <!-- der @for-Block wird benutzt, um über die Controls Property des Product FormArray zu iterieren
+         und für jedes Control ein Label und ein Input-Feld zu erzeugen
+         Wir benutzen das $index Schlüsselwort des @for-Blocks, um
+         einen dynamisch generierten Namen für jedes FormControl zu erzeugen indem formControlName-Binding
+         genutzt wird -->
+        @for(product of cartForm.controls.products.controls; track $index) {
+            <label>{{ products[$index].title}}</label>
+            <input [formControlName]="$index" type="number"/>
+        }
+    </div>
+</div>

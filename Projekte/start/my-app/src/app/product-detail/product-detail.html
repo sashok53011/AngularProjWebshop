@@ -7,21 +7,36 @@ das das ausgewählte Produkt darstellt. -->
 @if (product) {
     <p>You selected: <strong>{{ product.title }}</strong></p>
     <p>{{product.price | currency: 'EUR'}}</p>
-    <form (ngSubmit)="changePrice(product)">
-      <input placeholder="New price" type="number" name="price" [(ngModel)]="price" />
+    <form (ngSubmit)="changePrice(product)" #priceForm="ngForm">
+      <input placeholder="New price"
+       type="number"
+       name="price"
+       required min="1"
+       appPriceMaximum threshold="500"
+       #priceCtrl="ngModel"
+       [(ngModel)]="price" />
+       <!-- die priceCtrl-Template-Reference wird an die ngModel Property gebunden
+        Die ngModel Property gibt Zugriff auf auf das darunterliegende Formular-Controll-Model,
+         Formular-Validierungen und Eigenschaften -->
       <button
         class="secondary" type="submit"
-          >
-            Change
+          [disabled]="priceForm.invalid">
+           Change
       </button>
+      @if (priceCtrl.dirty && (priceCtrl.invalid || priceCtrl.hasError('min'))) {
+      <span class="help-text">Please enter a valid price</span>
+      }
+      @if (priceCtrl.dirty && priceCtrl.hasError('priceMaximum')) {
+      <span class="help-text">Price must be smaller or equal to 500</span>
+      }
     </form>
     <div class="pill-group">
       <p class="pill">{{product.category}}</p>
     </div>
     <div class="button-group">
-@if (authService.isLoggedIn()) {   
-    <button (click)="addToCart()">Add to Cart</button>
-}
+      @if (authService.isLoggedIn()) {  
+        <button (click)="addToCart(product.id)">Add to Cart</button>
+      }
     <button class="delete" (click)="remove(product)">Delete</button>
     </div>
     <!-- <input appNumeric/> -->

@@ -1,11 +1,67 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+//Modifizieren um die Cart-Items anzuzeigen.
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule
+} from '@angular/forms';
+import { Product } from '../product';
+import { CartServ } from '../cart-serv';
+import { Products } from '../products';
 
 @Component({
   selector: 'app-cart',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './cart.html',
   styleUrl: './cart.css',
 })
-export class Cart {
+export class Cart implements OnInit{
+  // Hier wurde ein FormGroup-Objekt erstellt, das
+  // eine Product Property enthält. Der Wert der Product Property
+  //wird als Instanz einer FormArray-Klasse gesetzt. Der Konstruktor
+  // der FormArray-Klasse akzeptiert eine Liste von FormControl-Instanzen
+  // mit dem Typ number als Parameter. Die Liste ist leer, solange
+  // Cart keine Produkte enthält. Die Products Property außerhalb 
+  // der FormGroup-Instanz wird aus Gründen der Übersichtlichkeit erstellt,
+  //  um die Titel von jedem Produkt im Warenkorb anzuzeigen.
+  cartForm = new FormGroup({
+    products: new FormArray<FormControl<number>>([])
+  });
+  products: Product[] = [];
 
+  constructor(
+    private cartService: CartServ,
+    private productsService: Products) {}
+  
+  // Hier werden beide Methoden kombniert.
+  ngOnInit(): void {
+    this.getProducts();
+    this.buildForm();
+  }
+
+  private getProducts() {
+    this.productsService.getProducts().subscribe( products => {
+        this.cartService.cart?.products.forEach(item => {
+        const foundProduct = products.find(p => p.id === item.productId);
+        if (foundProduct) {
+          this.products.push(foundProduct);
+        }
+      })
+      
+    })
+    
+  }
+  // Methode um das Formular zu bauen.
+  // Wir iterieren über die Products-Property und fügen
+  // eine FormControl-Instanz für jedes Produkt innerhalb des FormArrays hinzu.
+  // Der Anfangswert jeder FormControl-Instanz ist 1, was die Standardmenge 
+  // für jedes Produkt im Warenkorb darstellt.
+  private buildForm() {
+    this.products.forEach(() => {
+      this.cartForm.controls.products.push(
+        new FormControl(1, { nonNullable: true })
+      );
+    });
+  } 
 }

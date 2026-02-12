@@ -2,14 +2,16 @@ import { CommonModule } from '@angular/common';
 import { Component, input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router'; 
 import { Product } from '../product';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { Products } from '../products';
 import { Auth } from '../auth';
 import { FormsModule } from '@angular/forms';
+import { CartServ } from '../cart-serv';
+import { PriceMaximum } from '../price-maximum';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PriceMaximum],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
@@ -23,16 +25,28 @@ export class ProductDetail implements OnInit {
     private productsService: Products,
     public authService: Auth,
     private route: ActivatedRoute,
-    private router: Router) {}
+    private router: Router,
+    private cartService: CartServ) {}
 
-   addToCart() {
+  // Methode zum Hinzufügen eines Produkts zum Warenkorb
+   addToCart(id: number) {
+     this.cartService.addProduct(id).subscribe();
    }
   // Lifecycle-Hook OnInit, um die Produktdetails zu laden, wenn die Komponente initialisiert wird
   // switchMap-Operator wird verwendet, um die Produktdetails basierend auf der ID aus der Route zu laden
   // ActivatedRoute enthält das paramMap-Observable, das die Parameter der aktuellen Route enthält
-  ngOnInit(): void {
-    this.product$ = this.productsService.getProduct(Number(this.id()!));
-   };//Alternative zu SwitchMap, um die Produktdetails zu laden, wenn die ID sich ändert
+
+   ngOnInit(): void {
+    this.product$ = this.route.paramMap.pipe(
+      switchMap(params => {
+        return this.productsService.getProduct(Number(params.get('id')));
+      })
+    );
+  }  
+
+  //ngOnInit(): void {
+  //  this.product$ = this.productsService.getProduct(Number(this.id()!));
+ //  };//Alternative zu SwitchMap, um die Produktdetails zu laden, wenn die ID sich ändert
    //Vorteil: Die Komponent ist simpler und es gibt keine asynchronen Aufrufe mit Observable
    // Man kann auf existierende Kompoenenten zugreifen mit input()- output()-Bindings und
    // dabei eine Route nutzen.

@@ -13,8 +13,3 @@ select {
   border: 1px solid #BDBDBD;
   width: 220px;
 }
-
-label {
-  margin-bottom: 4px;
-  display: block;
-}
