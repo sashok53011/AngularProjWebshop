@@ -1,8 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-// HttpParams für Such- und Filter-Parameter
+import { HttpClient, HttpParams, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+// HttpParams für Such- und Filter-Parameter, HttpStatusCode enthält eine Liste von allen HTTP Antwort Status Codes.
 import { Injectable, inject } from '@angular/core';
 import { Product } from './product';
-import { Observable, map, of, tap } from 'rxjs';
+import { Observable, map, of, tap, catchError, throwError } from 'rxjs';
 import { APP_SETTINGS } from './app.setting';
 
 @Injectable(
@@ -18,6 +18,28 @@ export class Products {
   // HttpClient wird über DI bereitgestellt
   constructor(private http: HttpClient) {}
 
+   private handleError(error: HttpErrorResponse) {
+    let message = '';
+  
+    switch(error.status) {
+      case 0:
+        message = 'Client error';
+        break;
+      case HttpStatusCode.InternalServerError:
+        message = 'Server error';
+        break;
+      case HttpStatusCode.BadRequest:
+        message = 'Request error';
+        break;
+      default:
+        message = 'Unknown error';
+    }
+    
+    console.error(message, error.error);
+    
+    return throwError(() => error);
+  }
+  
   // Nutze HttpClient, um die Produkte von der API zu laden
   // und gibt ein Observable mit einem Product-Array zurück
   getProducts(limit?: number): Observable<Product[]> {
@@ -30,7 +52,10 @@ export class Products {
       }).pipe(map(products => {
       this.products = products;
       return products;
-      }));
+      }),
+      
+      catchError(this.handleError)
+      ); 
     }
     return of(this.products);
   };

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Products } from '../products';
 import{ Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -13,7 +13,7 @@ import { priceMaximumValidator } from '../price-maximum.validator';
   templateUrl: './product-create.html',
   styleUrl: './product-create.css',
 })
-export class ProductCreate {
+export class ProductCreate implements OnInit {
   // Dependency Injection des Products-Services und des Router-Services
   constructor(
     private productsService: Products,
@@ -50,7 +50,9 @@ export class ProductCreate {
     });
   } */
   
-  /* ngOnInit(): void {
-    this.buildForm();
-  } */
+  ngOnInit(): void {
+    this.productForm.controls.category.valueChanges.subscribe(() => {
+      this.productForm.controls.price.reset();
+    });
+  }
 }

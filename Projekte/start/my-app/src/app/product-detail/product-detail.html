@@ -14,7 +14,8 @@ das das ausgewählte Produkt darstellt. -->
        required min="1"
        appPriceMaximum threshold="500"
        #priceCtrl="ngModel"
-       [(ngModel)]="price" />
+       [(ngModel)]="price"
+       (ngModelChange)="price = $event" />
        <!-- die priceCtrl-Template-Reference wird an die ngModel Property gebunden
         Die ngModel Property gibt Zugriff auf auf das darunterliegende Formular-Controll-Model,
          Formular-Validierungen und Eigenschaften -->

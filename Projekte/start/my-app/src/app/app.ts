@@ -1,4 +1,4 @@
-import { Component,
+import {Component,
   inject
    } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
@@ -15,7 +15,7 @@ import { AuthComp } from './auth-comp/auth-comp';
   
 })
 export class App {
-  
+
   settings = inject(APP_SETTINGS);
 
 }
