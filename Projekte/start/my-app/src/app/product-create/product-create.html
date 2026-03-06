@@ -3,36 +3,36 @@
  die aus ReavtiveFormModule Klasse exportiert wird
  um die FormGroup Instanz mit einem Form-Element zu verbinden -->
 <form [formGroup]="productForm!" (ngSubmit)="createProduct()">
-<div>
-  <label for="title">Title</label>
-  <input id="title" formControlName="title" required/>
+<mat-form-field>
+  <mat-label>Title</mat-label>
+  <input formControlName="title" matInput required/>
    @if (productForm.controls.title.touched && productForm.controls.title.invalid) {
-      <span class="help-text">Title is required</span>
+      <mat-error class="help-text">Title is required</mat-error>
     }
-</div>
-<div>
-  <label for="price">Price</label>
-  <input id="price" formControlName="price" type="number" required />
+  </mat-form-field>
+<mat-form-field>
+  <mat-label>Price</mat-label>
+  <input formControlName="price" matInput type="number" required />
   @if (productForm.controls.price.touched && productForm.controls.price.hasError('required')) {
-      <span class="help-text">Price is required</span>
+      <mat-error>Price is required</mat-error>
     }
   @if (productForm.controls.price.touched && productForm.controls.price.hasError('min')) {
-      <span class="help-text">Price should be greater than 0</span>
+      <mat-error class="help-text">Price should be greater than 0</mat-error>
     }
   @if (productForm.controls.price.touched && productForm.controls.price.hasError('priceMaximum')) {
-      <span class="help-text">Price must be smaller or equal to 1000</span>
+      <mat-error class="help-text">Price must be smaller or equal to 1000</mat-error>
     }
-</div>
+</mat-form-field>
+<mat-form-field>
+  <mat-label for="category">Category</mat-label>
+  <mat-select id="category" formControlName="category">
+    <mat-option>Select a category</mat-option>
+    <mat-option value="electronics">Electronics</mat-option>
+    <mat-option value="jewelery">Jewelery</mat-option>
+    <mat-option>Other</mat-option>
+  </mat-select>
+</mat-form-field>
 <div>
-  <label for="category">Category</label>
-  <select id="category" formControlName="category">
-    <option>Select a category</option>
-    <option value="electronics">Electronics</option>
-    <option value="jewelery">Jewelery</option>
-    <option>Other</option>
-  </select>
-</div>
-<div>
-  <button type="submit" [disabled]="productForm.invalid">Create</button>
+  <button mat-raised-button type="submit" [disabled]="productForm.invalid">Create</button>
 </div>
 </form>

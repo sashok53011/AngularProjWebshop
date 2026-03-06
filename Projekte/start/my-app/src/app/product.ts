@@ -4,4 +4,5 @@ export interface Product {
     price : number;
     //categories : Record<number, string>;
     category: string;
+    image: string;
 }

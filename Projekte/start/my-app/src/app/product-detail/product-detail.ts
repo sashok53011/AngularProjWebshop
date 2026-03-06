@@ -8,10 +8,28 @@ import { Auth } from '../auth';
 import { FormsModule } from '@angular/forms';
 import { CartServ } from '../cart-serv';
 import { PriceMaximum } from '../price-maximum';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatError, MatSuffix } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatChipSet, MatChip } from '@angular/material/chips';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-product-detail',
-  imports: [CommonModule, FormsModule, PriceMaximum],
+  imports: [CommonModule, FormsModule, PriceMaximum,
+    MatButton,
+    MatInput,
+    MatFormField,
+    MatError,
+    MatIcon,
+    MatSuffix,
+    MatIconButton,
+    MatChipSet,
+    MatChip,
+    MatSnackBarModule
+  ],
   templateUrl: './product-detail.html',
   styleUrl: './product-detail.css',
 })
@@ -26,11 +44,16 @@ export class ProductDetail implements OnInit {
     public authService: Auth,
     private route: ActivatedRoute,
     private router: Router,
-    private cartService: CartServ) {}
+    private cartService: CartServ,
+    private snackBar: MatSnackBar
+  ) {}
 
   // Methode zum Hinzufügen eines Produkts zum Warenkorb
    addToCart(id: number) {
-     this.cartService.addProduct(id).subscribe();
+     this.cartService.addProduct(id).subscribe(()=> {
+      // Nach dem Hinzufügen eines Produkts zum Warenkorb wird eine Snackbar-Nachricht angezeigt, um den Benutzer zu informieren.
+      this.snackBar.open('Produkt zum Warenkorb hinzugefügt', 'OK', { duration: 3000 })
+     });
    }
   // Lifecycle-Hook OnInit, um die Produktdetails zu laden, wenn die Komponente initialisiert wird
   // switchMap-Operator wird verwendet, um die Produktdetails basierend auf der ID aus der Route zu laden

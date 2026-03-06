@@ -1,4 +1,4 @@
-import { AsyncPipe } from '@angular/common'; // Import für AsyncPipe, um Observable in der Vorlage zu verwenden
+import { AsyncPipe, CurrencyPipe } from '@angular/common'; // Import für AsyncPipe, um Observable in der Vorlage zu verwenden
 import { Component, inject, OnInit } from '@angular/core';
 import { Product } from '../product'; // Import des Interface Product
 import { SortPipe } from '../sort-pipe';
@@ -7,11 +7,19 @@ import { Observable, switchMap, of, map } from 'rxjs';
 //import { toSignal } from '@angular/core/rxjs-interop';
 // toSignal wandelt ein Observable in ein Signal um
 import { ActivatedRoute, RouterLink } from '@angular/router'; // Import für RouterLink, um Navigation zu ermöglichen
+import { MatMiniFabButton } from '@angular/material/button';
+import { MatIcon} from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
+import { MatButtonToggle, MatButtonToggleGroup } from '@angular/material/button-toggle';
 
 
 @Component({
   selector: 'app-product-list', //
-  imports: [ SortPipe, RouterLink, AsyncPipe],
+  imports: [ SortPipe, RouterLink, AsyncPipe, CurrencyPipe,
+     MatMiniFabButton, MatIcon, MatCardModule, MatTableModule,
+    MatButtonToggle,
+    MatButtonToggleGroup],
   templateUrl: './product-list.html', // Pfad zur HTML-Vorlage
   styleUrl: './product-list.css', // Pfad zur CSS-Datei
   })
@@ -19,6 +27,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router'; // Import für Rou
 export class ProductList implements OnInit {
   
   products$: Observable<Product[]> | undefined;
+  columnNames = ['title', 'price' ]
   
   // Methode zum Abrufen der Produkte
   // Prefetching: Produkte werden bereits geladen,

@@ -6,10 +6,21 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular
 
 import { priceMaximumValidator } from '../price-maximum.validator';
 //eigenen Validator importieren
+import { MatButton } from '@angular/material/button';
+import { MatInput } from '@angular/material/input';
+import { MatFormField, MatError, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatOption } from '@angular/material/select';
 
 @Component({
   selector: 'app-product-create',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule,
+    MatButton,
+    MatInput,
+    MatFormField,
+    MatError,
+    MatLabel,
+    MatSelect,
+    MatOption],
   templateUrl: './product-create.html',
   styleUrl: './product-create.css',
 })

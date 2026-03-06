@@ -1,17 +1,24 @@
 <header>
-  <h2>{{ settings.title }}</h2>
-  <span class="spacer"></span>
-  <div class="menu-links">
-    
-   <a routerLink="/cart" routerLinkActive="active">Cart</a>
-   <a routerLink="/products" routerLinkActive="active">Products</a>
-   <a routerLink="/user" routerLinkActive="active">Mein Profil</a> 
-  </div>
-  <app-auth-comp></app-auth-comp>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <h2>{{ settings.title }}</h2>
+      <span class="spacer"></span>
+      <button mat-button routerLink="/cart" [matBadge]="cartService.cart?.products?.length">My Cart</button>
+      <button mat-button routerLink="/products">Products</button>
+      <button mat-button routerLink="/user">Mein Profil</button> 
+      <app-auth-comp></app-auth-comp>
+    </mat-toolbar-row>
+  </mat-toolbar>
 </header>
 <main class="main">
   <div class="content">
     <router-outlet />
   </div>
 </main>
-<footer appCopyright>- v{{ settings.version }}</footer>
+<footer>
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <span appCopyright>- v{{ settings.version }}</span>
+    </mat-toolbar-row>
+  </mat-toolbar>
+</footer>

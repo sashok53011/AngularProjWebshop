@@ -6,10 +6,24 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Copyright } from './copyright';
 import { APP_SETTINGS } from './app.setting';
 import { AuthComp } from './auth-comp/auth-comp';
+import { MatToolbarRow, MatToolbar } from '@angular/material/toolbar';
+import { MatButton } from '@angular/material/button';
+import { MatBadge } from '@angular/material/badge';
+import { CartServ } from './cart-serv';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive,Copyright, AuthComp],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    Copyright,
+    AuthComp,
+    MatToolbarRow,
+    MatToolbar,
+    MatButton,
+    MatBadge
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css',
   
@@ -17,5 +31,6 @@ import { AuthComp } from './auth-comp/auth-comp';
 export class App {
 
   settings = inject(APP_SETTINGS);
+  cartService = inject(CartServ);
 
 }

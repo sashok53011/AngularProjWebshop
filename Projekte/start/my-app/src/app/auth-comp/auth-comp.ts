@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { Auth } from '../auth';
+import { MatButton} from '@angular/material/button';
+// Angular Material Button
 
 @Component({
   selector: 'app-auth-comp',
-  imports: [],
+  imports: [MatButton],
   templateUrl: './auth-comp.html',
   styleUrl: './auth-comp.css',
 })

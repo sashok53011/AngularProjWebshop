@@ -8,37 +8,42 @@ das das ausgewählte Produkt darstellt. -->
     <p>You selected: <strong>{{ product.title }}</strong></p>
     <p>{{product.price | currency: 'EUR'}}</p>
     <form (ngSubmit)="changePrice(product)" #priceForm="ngForm">
-      <input placeholder="New price"
-       type="number"
-       name="price"
-       required min="1"
-       appPriceMaximum threshold="500"
-       #priceCtrl="ngModel"
-       [(ngModel)]="price"
-       (ngModelChange)="price = $event" />
+      <mat-form-field>
+        <input placeholder="New price"
+          type="number"
+          name="price"
+          required min="1"
+          appPriceMaximum threshold="500"
+          #priceCtrl="ngModel"
+          matInput
+          [(ngModel)]="price"
+          (ngModelChange)="price = $event" />
        <!-- die priceCtrl-Template-Reference wird an die ngModel Property gebunden
         Die ngModel Property gibt Zugriff auf auf das darunterliegende Formular-Controll-Model,
          Formular-Validierungen und Eigenschaften -->
       <button
+        mat-icon-button
+        matSuffix
         class="secondary" type="submit"
           [disabled]="priceForm.invalid">
-           Change
+           <mat-icon>edit</mat-icon>
       </button>
       @if (priceCtrl.dirty && (priceCtrl.invalid || priceCtrl.hasError('min'))) {
-      <span class="help-text">Please enter a valid price</span>
+      <mat-error class="help-text">Please enter a valid price</mat-error>
       }
       @if (priceCtrl.dirty && priceCtrl.hasError('priceMaximum')) {
-      <span class="help-text">Price must be smaller or equal to 500</span>
+      <mat-error class="help-text">Price must be smaller or equal to 500</mat-error>
       }
+      </mat-form-field>
     </form>
-    <div class="pill-group">
-      <p class="pill">{{product.category}}</p>
-    </div>
+    <mat-chip-set>
+      <mat-chip class="pill">{{product.category}}</mat-chip>
+    </mat-chip-set>
     <div class="button-group">
       @if (authService.isLoggedIn()) {  
-        <button (click)="addToCart(product.id)">Add to Cart</button>
+        <button mat-raised-button (click)="addToCart(product.id)">Add to Cart</button>
       }
-    <button class="delete" (click)="remove(product)">Delete</button>
+    <button mat-raised-button class="delete" (click)="remove(product)">Delete</button>
     </div>
     <!-- <input appNumeric/> -->
 }

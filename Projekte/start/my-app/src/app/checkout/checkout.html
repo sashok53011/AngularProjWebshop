@@ -1,0 +1,15 @@
+<!-- Hier im Template haben wir verschiedene Direktiven und Elemente
+ die zu Angular Madterial gehören. mat-dialog-titel definiert die Überschrift des Dialogs, 
+ mat-dialog-content definiert den Inhalt des Dialogs und mat-dialog-actions definiert die Aktionen,
+ die der Benutzer ausführen kann. In diesem Fall haben wir zwei Schaltflächen, "Ja" und "Nein",
+  die mit der mat-raised-button-Direktive von Angular Material gestaltet sind.
+ -->
+<h1 mat-dialog-title>Cart Checkout</h1>
+<mat-dialog-content>
+    <span> Sie haben {{ data }} noch offene Produkte in Ihrem Warenkorb.
+         Wollen Sie fortfahren? </span>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-raised-button mat-dialog-close>Ja</button>
+    <button mat-raised-button [mat-dialog-close]="false">Nein</button>
+</mat-dialog-actions>
