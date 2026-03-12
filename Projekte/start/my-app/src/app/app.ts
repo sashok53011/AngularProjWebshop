@@ -1,7 +1,7 @@
 import {Component,
   inject
    } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 
 import { Copyright } from './copyright';
 import { APP_SETTINGS } from './app.setting';
@@ -16,7 +16,6 @@ import { CartServ } from './cart-serv';
   imports: [
     RouterOutlet,
     RouterLink,
-    RouterLinkActive,
     Copyright,
     AuthComp,
     MatToolbarRow,
