@@ -1,59 +1,125 @@
-# MyApp
+# Angular Webshop («Mein e-shop»)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.14.
+Учебный интернет-магазин на **Angular 20**, созданный как практический проект по главам книги (HTTP-запросы, маршрутизация, формы, обработка ошибок, Angular Material). Данные о товарах берутся из публичного тестового API [fakestoreapi.com](https://fakestoreapi.com).
 
-## Development server
+## Возможности
 
-To start a local development server, run:
+- Список товаров с загрузкой через **Resolver** (prefetching) и сортировкой (`SortPipe`)
+- Карточка товара: изменение цены (PATCH), удаление (DELETE), добавление в корзину со Snackbar-уведомлением
+- Создание товара с реактивной формой и кастомным валидатором цены (`priceMaximumValidator(1000)`)
+- Корзина (`FormArray` для количества), доступная только после входа
+- Аутентификация через токен (сигналы `signal` / `computed`)
+- Глобальная обработка ошибок (`ErrorHandler`)
+- Lazy loading маршрута профиля (`loadChildren`)
+- Guard'ы: `authGuard` (canActivate / canMatch), `checkoutGuard` (canDeactivate, диалог подтверждения)
+- UI на **Angular Material** (тулбар, таблица, диалог, снекбар, бейдж)
 
-```bash
-ng serve
-```
+## Стек
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+| Компонент | Версия |
+|---|---|
+| Angular | 20.3 |
+| Angular Material / CDK | 20.2 |
+| RxJS | 7.8 |
+| TypeScript | 5.9 |
+| zone.js | 0.15 |
+| Тесты | Karma + Jasmine |
 
-## Code scaffolding
+## Быстрый старт
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Вариант 1: ярлыки (Windows)
 
-```bash
-ng generate component component-name
-```
+В корне проекта созданы файлы-ярлыки — двойной клик запускает нужный процесс:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+| Файл | Что делает |
+|---|---|
+| `start.bat` | Запуск dev-сервера (`ng serve`) на http://localhost:4200/ |
+| `test.bat` | Запуск unit-тестов (`ng test`, Karma + Jasmine) |
+| `build.bat` | Продакшн-сборка (`ng build`) в папку `dist/` |
 
-```bash
-ng generate --help
-```
+При первом запуске ярлык автоматически выполнит `npm install`, если зависимости ещё не установлены.
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+### Вариант 2: командная строка
 
 ```bash
-ng e2e
+# установка зависимостей
+npm install
+
+# dev-сервер (http://localhost:4200/)
+npm start
+
+# unit-тесты
+npm test
+
+# продакшн-сборка (артефакты в dist/)
+npm run build
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Структура проекта
 
-## Additional Resources
+```
+src/app/
+├── app.ts / app.html / app.css     # Оболочка: тулбар, навигация, футер
+├── app.routes.ts                   # Маршруты приложения
+├── app.config.ts                   # Провайдеры (router, http, settings, ErrorHandler)
+├── app.setting.ts                  # InjectionToken APP_SETTINGS (title, version, apiUrl)
+├── app-error-handler.ts            # Глобальный ErrorHandler
+│
+├── products.ts                     # Сервис товаров (CRUD + локальный кэш)
+├── product.ts                     # Интерфейс Product
+├── products-resolver.ts            # Resolver для prefetching списка товаров
+├── auth.ts                         # Сервис аутентификации (сигналы)
+├── auth-guard.ts                   # Guard: canActivate / canMatch
+├── checkout-guard.ts               # Guard: canDeactivate (диалог при уходе из корзины)
+├── cart-serv.ts                    # Сервис корзины (POST/PUT через defer)
+├── cart-int.ts                     # Интерфейс корзины
+│
+├── product-list/                   # Список товаров
+├── product-detail/                 # Детали товара (цена, удаление, в корзину)
+├── product-create/                 # Форма создания товара
+├── cart/                           # Корзина (FormArray)
+├── checkout/                       # Диалог подтверждения (MatDialog)
+├── auth-comp/                      # Кнопка входа/выхода
+├── user/ + user.routes.ts          # Профиль (lazy route)
+├── key-logger/                     # Демо: перехват клавиш (fromEvent + RxJS)
+│
+├── sort-pipe.ts                    # Пайп сортировки товаров
+├── price-maximum.validator.ts      # Кастомный валидатор цены
+├── price-maximum.ts                # Директива-обёртка валидатора (NG_VALIDATORS)
+├── copyright.ts                    # Директива для футера
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Маршруты
+
+| Путь | Компонент | Доступ |
+|---|---|---|
+| `/products` | Список товаров (resolver) | открыт |
+| `/products/new` | Создание товара | открыт |
+| `/products/:id` | Детали товара | открыт |
+| `/cart` | Корзина | `authGuard` + `checkoutGuard` |
+| `/user` | Профиль (lazy) | `authGuard` (canMatch) |
+| `""`, `**` | редирект на `/products` | — |
+
+## Ключевые моменты реализации
+
+- **Кэш товаров** — `Products` хранит загруженные товары в массиве; повторные запросы идут из кэша.
+- **Сигналы** — токен авторизации хранится в `signal`, состояние входа — `computed`.
+- **RxJS** — `defer` в корзине выбирает POST/PUT, `switchMap` в деталях товара реагирует на смену параметра маршрута.
+- **Guard'ы** — функциональные, с `inject()`; `checkoutGuard` открывает `MatDialog` вместо нативного `confirm`.
+- **Конфигурация** — настройки приложения предоставляются через `InjectionToken`.
+
+## Тесты
+
+```bash
+npm test
+```
+
+Тесты (Karma + Jasmine) — для каждого компонента/сервиса есть файл `*.spec.ts`.
+
+## Полезные команды Angular CLI
+
+```bash
+ng generate component component-name   # новый компонент
+ng generate service service-name       # новый сервис
+ng build --watch --configuration development  # сборка в режиме наблюдения
+```

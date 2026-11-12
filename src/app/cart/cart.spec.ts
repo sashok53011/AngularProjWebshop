@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
 import { Cart } from './cart';
+import { APP_SETTINGS, appSettings } from '../app.setting';
 
 describe('Cart', () => {
   let component: Cart;
@@ -8,7 +12,13 @@ describe('Cart', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Cart]
+      imports: [Cart],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideNoopAnimations(),
+        { provide: APP_SETTINGS, useValue: appSettings },
+      ]
     })
     .compileComponents();
 

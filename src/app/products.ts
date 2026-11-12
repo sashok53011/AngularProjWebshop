@@ -42,9 +42,11 @@ export class Products {
   
   // Nutze HttpClient, um die Produkte von der API zu laden
   // und gibt ein Observable mit einem Product-Array zurück
-  getProducts(limit?: number): Observable<Product[]> {
-    // Wenn es keine Produkte im lokalen Array gibt, lade sie von der API
-    if (this.products.length === 0) {
+  // force = true umgeht den Cache und lädt immer frische Daten von der API
+  getProducts(limit?: number, force = false): Observable<Product[]> {
+    // Wenn es keine Produkte im lokalen Array gibt oder force gesetzt ist,
+    // lade die Produkte von der API
+    if (force || this.products.length === 0) {
       const options = new HttpParams().set('limit', limit ||'10');
       // Hinzufügen der Parameter zum GET-Request
       return this.http.get<Product[]>(this.productsUrl, {
@@ -69,9 +71,28 @@ export class Products {
   // anstelle der Fake-API
   getProduct(id: number): Observable<Product> {
     const product = this.products.find(p => p.id === id);
-    //return this.http.get<Product>(`${this.productsUrl}/${id}`)
-    return of(product!);
+    // Wenn das Produkt im Cache vorhanden ist, wird es direkt zurückgegeben.
+    // Ansonsten wird es per GET-Request von der API geladen und im Cache abgelegt,
+    // damit nach dem direkten Aufruf der Detailseite (ohne vorherigen Listenaufruf)
+    // kein undefined zurückgegeben wird.
+    if (product) {
+      return of(product);
+    }
+    return this.http.get<Product>(`${this.productsUrl}/${id}`).pipe(
+      tap(newProduct => {
+        if (!this.products.some(p => p.id === newProduct.id)) {
+          this.products.push(newProduct);
+        }
+      }),
+      catchError(this.handleError)
+    );
   };
+
+  // Setzt den lokalen Cache zurück, damit der nächste Abruf
+  // wieder frische Daten von der API lädt.
+  refresh(): void {
+    this.products = [];
+  }
   // Die Post-Mehtode des HttpClient wird genutzt und durchläuft den Product-Endpunkt
   // der API, um ein neues Produkt-Objekt als Parameter zu übergeben.
   // Ebenso wird das neue Proudukt dem lokalen Product-Array, dem Cache hinzugefügt.

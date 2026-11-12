@@ -20,13 +20,23 @@ export class CartServ {
   // Ansonsten wird ein PUT-Request gesendet, um die cartProduct-Variable zum bestehenden Warenkorb hinzuzufügen.
   addProduct(id: number): Observable<CartInt> {
     const cartProduct = { productId: id, quantity: 1 };
-    
-    return defer(() =>
-      !this.cart
-      ? this.http.post<CartInt>(this.cartUrl, { products: [cartProduct] })
-      : this.http.put<CartInt>(`${this.cartUrl}/${this.cart.id}`, {
-          products: [...this.cart.products, cartProduct]
-        })
-    ).pipe(map(cart => this.cart = cart));
+
+    return defer(() => {
+      // Wenn noch kein Warenkorb existiert, wird ein neuer per POST angelegt.
+      if (!this.cart) {
+        return this.http.post<CartInt>(this.cartUrl, { products: [cartProduct] });
+      }
+      // Ansonsten wird per PUT hinzugefügt. Bereits vorhandene Produkte
+      // werden nach productId zusammengeführt, damit keine Duplikate entstehen,
+      // sondern die Menge des bestehenden Eintrags erhöht wird.
+      const products = this.cart.products.some(p => p.productId === id)
+        ? this.cart.products.map(p =>
+            p.productId === id
+              ? { ...p, quantity: (p.quantity ?? 1) + 1 }
+              : p
+          )
+        : [...this.cart.products, cartProduct];
+      return this.http.put<CartInt>(`${this.cartUrl}/${this.cart.id}`, { products });
+    }).pipe(map(cart => this.cart = cart));
   }
 }

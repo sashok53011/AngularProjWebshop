@@ -1,4 +1,4 @@
 export interface CartInt {
     id: number;
-    products: {productId: number}[]
+    products: {productId: number; quantity?: number}[]
 }

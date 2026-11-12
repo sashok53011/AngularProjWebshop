@@ -36,10 +36,13 @@ export class Cart implements OnInit{
     private cartService: CartServ,
     private productsService: Products) {}
   
-  // Hier werden beide Methoden kombniert.
+  // Lifecycle-Hook OnInit zur Initialisierung des Warenkorbs
   ngOnInit(): void {
     this.getProducts();
-    this.buildForm();
+    // buildForm() wird nicht hier aufgerufen, weil getProducts()
+    // asynchron ist und die Produkte zum Zeitpunkt des Aufrufs
+    // noch nicht vorliegen. Das Formular wird stattdessen
+    // nach dem Empfang der Produkte in getProducts() gebaut.
   }
 
   private getProducts() {
@@ -50,7 +53,8 @@ export class Cart implements OnInit{
           this.products.push(foundProduct);
         }
       })
-      
+      // Formular erst jetzt bauen, wenn this.products befüllt ist
+      this.buildForm();
     })
     
   }

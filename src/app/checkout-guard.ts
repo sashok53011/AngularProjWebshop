@@ -2,7 +2,7 @@ import { CanDeactivateFn } from '@angular/router';
 import { Cart } from './cart/cart';
 import { MatDialog } from '@angular/material/dialog';
 import { Checkout } from './checkout/checkout';
-import { inject } from '@angular/core/primitives/di';
+import { inject } from '@angular/core';
 import { CartServ } from './cart-serv';
 
 export const checkoutGuard: CanDeactivateFn<Cart> = () => {
